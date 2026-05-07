@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResuReady — AI Resume Feedback</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">ResuReady</a>
+    <span class="nav-tagline">AI-powered resume feedback</span>
+  </nav>
+
+  <main>
+
+    <div class="hero">
+      <h1>Your resume, <em>actually ready</em></h1>
+      <p>Upload your resume and get specific, actionable feedback in seconds — powered by AI, built for early-career applicants.</p>
+    </div>
+
+    <div id="error-banner" class="error-banner" role="alert"></div>
+
+    <div class="card">
+      <form id="resume-form" novalidate>
+
+        <div class="card-title">
+          <span class="step-num">1</span>
+          Tell us about yourself
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group full">
+            <label for="name">Your name</label>
+            <input type="text" id="name" name="name" placeholder="Alex Johnson" autocomplete="name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="industry">Target industry</label>
+            <select id="industry" name="industry" required>
+              <option value="" disabled selected>Select industry</option>
+              <option value="Technology">Technology</option>
+              <option value="Finance">Finance</option>
+              <option value="Consulting">Consulting</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Healthcare">Healthcare</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="years_of_experience">Years of experience</label>
+            <select id="years_of_experience" name="years_of_experience" required>
+              <option value="" disabled selected>Select range</option>
+              <option value="0-1">0–1 years</option>
+              <option value="1-3">1–3 years</option>
+              <option value="3-5">3–5 years</option>
+              <option value="5+">5+ years</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card-title" style="margin-top: 1.75rem;">
+          <span class="step-num">2</span>
+          Upload your resume
+        </div>
+
+        <div class="drop-zone" id="drop-zone">
+          <input type="file" id="resume-file" name="resume" accept=".pdf" required />
+          <span class="drop-icon">📄</span>
+          <p><strong>Drop your PDF here</strong> or click to browse</p>
+          <p style="font-size: 0.82rem; margin-top: 0.35rem; opacity: 0.7;">PDF only · Max 16 MB</p>
+          <div class="file-selected" id="file-selected-label"></div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submit-btn">Analyze My Resume</button>
+
+      </form>
+    </div>
+
+    <div class="loading-state" id="loading-state">
+      <div class="spinner"></div>
+      <p>Analyzing your resume…<br />This usually takes 15–30 seconds.</p>
+    </div>
+
+    <div id="results"></div>
+
+  </main>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>

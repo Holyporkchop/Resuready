@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResuReady</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --terracotta: #C05A2F;
+      --terracotta-light: #D4784F;
+      --terracotta-dark: #9E4724;
+      --cream: #FDFAF4;
+      --cream-dark: #F5F0E6;
+      --sage: #4A6741;
+      --sage-light: #6A8A60;
+      --sage-pale: #E8EEE7;
+      --ink: #1E1A16;
+      --ink-muted: #5C4F3F;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--cream);
+      color: var(--ink);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: var(--cream);
+      border-bottom: 1px solid rgba(192, 90, 47, 0.15);
+      backdrop-filter: blur(8px);
+      background-color: rgba(253, 250, 244, 0.92);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 1.5rem;
+      color: var(--terracotta);
+      letter-spacing: -0.02em;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .logo-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--sage);
+      border-radius: 50%;
+      display: inline-block;
+      margin-bottom: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--ink-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--terracotta);
+    }
+
+    .nav-cta {
+      background: var(--terracotta);
+      color: var(--cream) !important;
+      padding: 0.5rem 1.25rem;
+      border-radius: 100px;
+      transition: background 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--terracotta-dark) !important;
+      color: var(--cream) !important;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: calc(100vh - 68px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-bg-circle-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(192,90,47,0.08) 0%, transparent 70%);
+      top: -100px;
+      right: -150px;
+    }
+
+    .hero-bg-circle-2 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(74,103,65,0.07) 0%, transparent 70%);
+      bottom: -80px;
+      left: -120px;
+    }
+
+    .hero-content {
+      max-width: 780px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--sage);
+      background: var(--sage-pale);
+      padding: 0.35rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1.75rem;
+    }
+
+    .hero-eyebrow-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--sage);
+      border-radius: 50%;
+    }
+
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--terracotta);
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--ink-muted);
+      font-weight: 400;
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--terracotta);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.85rem 2rem;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary:hover {
+      background: var(--terracotta-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--ink-muted);
+      text-decoration: none;
+      padding: 0.85rem 1.5rem;
+      border-radius: 100px;
+      border: 1.5px solid rgba(94, 79, 63, 0.2);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--terracotta);
+      color: var(--terracotta);
+    }
+
+    .hero-scroll-hint {
+      margin-top: 4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--ink-muted);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+
+    .scroll-arrow {
+      width: 20px;
+      height: 20px;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: rotate(45deg);
+      animation: scrollBounce 1.6s ease-in-out infinite;
+    }
+
+    @keyframes scrollBounce {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50% { transform: rotate(45deg) translateY(4px); }
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how-it-works {
+      padding: 7rem 2rem;
+      background: var(--cream-dark);
+      position: relative;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-label-line {
+      width: 32px;
+      height: 2px;
+      background: var(--terracotta);
+      border-radius: 2px;
+    }
+
+    .section-label span {
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+    }
+
+    .how-it-works h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 500;
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      max-width: 480px;
+    }
+
+    .how-it-works h2 em {
+      font-style: italic;
+      color: var(--terracotta);
+    }
+
+    .how-intro {
+      color: var(--ink-muted);
+      font-size: 1.05rem;
+      max-width: 440px;
+      margin-bottom: 4rem;
+      line-height: 1.7;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      position: relative;
+    }
+
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 36px;
+      left: calc(16.66% + 1rem);
+      right: calc(16.66% + 1rem);
+      height: 1.5px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--terracotta) 0,
+        var(--terracotta) 6px,
+        transparent 6px,
+        transparent 14px
+      );
+      opacity: 0.3;
+    }
+
+    .step-card {
+      background: var(--cream);
+      border-radius: 20px;
+      padding: 2rem;
+      border: 1.5px solid rgba(192, 90, 47, 0.1);
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-card:hover {
+      border-color: rgba(192, 90, 47, 0.35);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(192, 90, 47, 0.1);
+    }
+
+    .step-number {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fraunces', serif;
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+
+    .step-card:nth-child(1) .step-number {
+      background: rgba(192, 90, 47, 0.12);
+      color: var(--terracotta);
+    }
+
+    .step-card:nth-child(2) .step-number {
+      background: rgba(74, 103, 65, 0.12);
+      color: var(--sage);
+    }
+
+    .step-card:nth-child(3) .step-number {
+      background: rgba(192, 90, 47, 0.12);
+      color: var(--terracotta);
+    }
+
+    .step-icon {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .step-card h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.25rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.6rem;
+      color: var(--ink);
+    }
+
+    .step-card p {
+      font-size: 0.93rem;
+      color: var(--ink-muted);
+      line-height: 1.65;
+    }
+
+    /* ── UPLOAD ── */
+    .upload-section {
+      padding: 7rem 2rem;
+      background: var(--cream);
+    }
+
+    .upload-section .section-label {
+      justify-content: center;
+    }
+
+    .upload-section h2 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-weight: 500;
+      letter-spacing: -0.025em;
+      text-align: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .upload-section h2 em {
+      font-style: italic;
+      color: var(--terracotta);
+    }
+
+    .upload-intro {
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 1.05rem;
+      margin-bottom: 3rem;
+    }
+
+    .upload-wrapper {
+      max-width: 580px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .coming-soon-badge {
+      position: absolute;
+      top: -14px;
+      right: 24px;
+      background: var(--sage);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.85rem;
+      border-radius: 100px;
+      z-index: 2;
+      box-shadow: 0 4px 12px rgba(74, 103, 65, 0.3);
+    }
+
+    .upload-area {
+      border: 2.5px dashed rgba(192, 90, 47, 0.4);
+      border-radius: 24px;
+      padding: 4rem 2.5rem;
+      text-align: center;
+      background: var(--cream-dark);
+      transition: border-color 0.25s, background 0.25s;
+      cursor: not-allowed;
+      position: relative;
+    }
+
+    .upload-area-inner {
+      pointer-events: none;
+    }
+
+    .upload-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1.5rem;
+      background: rgba(192, 90, 47, 0.1);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .upload-icon svg {
+      width: 30px;
+      height: 30px;
+      stroke: var(--terracotta);
+    }
+
+    .upload-area h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .upload-area p {
+      font-size: 0.9rem;
+      color: var(--ink-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .upload-formats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .format-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--terracotta);
+      background: rgba(192, 90, 47, 0.1);
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    .upload-divider {
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      opacity: 0.5;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: rgba(253, 250, 244, 0.5);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--cream);
+    }
+
+    .footer-copy {
+      font-size: 0.83rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .steps-grid::before {
+        display: none;
+      }
+
+      .hero {
+        padding: 4rem 1.5rem 3rem;
+        min-height: auto;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVBAR ── -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        ResuReady<span class="logo-dot"></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#how-it-works">How it works</a></li>
+        <li><a href="#upload">Try it</a></li>
+        <li><a href="#upload" class="nav-cta">Get started</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-bg-circle hero-bg-circle-1"></div>
+    <div class="hero-bg-circle hero-bg-circle-2"></div>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        AI-powered resume feedback
+      </div>
+
+      <h1>Your resume,<br /><em>actually ready</em></h1>
+
+      <p class="hero-sub">
+        Stop guessing what recruiters want. ResuReady reads your resume the way hiring managers do — and tells you exactly what to fix.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#upload" class="btn-primary">
+          Upload your resume
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#how-it-works" class="btn-ghost">See how it works</a>
+      </div>
+
+      <div class="hero-scroll-hint">
+        <div class="scroll-arrow"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HOW IT WORKS ── -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-inner">
+      <div class="section-label">
+        <div class="section-label-line"></div>
+        <span>The process</span>
+      </div>
+
+      <h2>Three steps to a <em>standout</em> resume</h2>
+      <p class="how-intro">
+        No fluff, no generic tips. Just honest, structured feedback grounded in what actually gets interviews.
+      </p>
+
+      <div class="steps-grid">
+
+        <div class="step-card">
+          <div class="step-number">01</div>
+          <span class="step-icon">📄</span>
+          <h3>Upload your resume</h3>
+          <p>Drop in your PDF or doc. We keep it private — your resume is never stored or shared with anyone.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">02</div>
+          <span class="step-icon">🔍</span>
+          <h3>AI reads between the lines</h3>
+          <p>Our model analyzes structure, clarity, impact language, and keyword gaps the way a seasoned recruiter would.</p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">03</div>
+          <span class="step-icon">✅</span>
+          <h3>Get a full feedback report</h3>
+          <p>Receive a clear, prioritized report with specific rewrites, strengths to keep, and a readiness score.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── UPLOAD ── -->
+  <section class="upload-section" id="upload">
+    <div class="section-inner">
+
+      <div class="section-label">
+        <div class="section-label-line"></div>
+        <span>Try it out</span>
+      </div>
+
+      <h2>Drop your resume.<br /><em>We'll do the rest.</em></h2>
+      <p class="upload-intro">Your next opportunity starts here.</p>
+
+      <div class="upload-wrapper">
+        <div class="coming-soon-badge">Coming soon</div>
+
+        <div class="upload-area">
+          <div class="upload-area-inner">
+            <div class="upload-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 16V8M12 8L9 11M12 8L15 11" />
+                <path d="M3 15V17C3 18.1046 3.89543 19 5 19H19C20.1046 19 21 18.1046 21 17V15" />
+              </svg>
+            </div>
+
+            <h3>Drop your resume here</h3>
+            <p>or click to browse from your device</p>
+
+            <div class="upload-formats">
+              <span class="format-tag">PDF</span>
+              <span class="upload-divider">·</span>
+              <span class="format-tag">DOCX</span>
+              <span class="upload-divider">·</span>
+              <span class="format-tag">DOC</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">ResuReady</div>
+      <div class="footer-copy">© 2026 ResuReady. All rights reserved.</div>
+    </div>
+  </footer>
+
+</body>
+</html>
