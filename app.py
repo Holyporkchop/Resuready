@@ -158,8 +158,9 @@ def analyze():
                 "created_at": datetime.now(timezone.utc),
             }
         )
-    except Exception:
-        pass
+    except Exception as e:
+        app.logger.error("MongoDB insert failed: %s", e)
+        print(f"MongoDB insert failed: {e}")
 
     return jsonify(feedback)
 
