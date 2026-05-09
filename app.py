@@ -4,6 +4,7 @@ import json
 from flask import Flask, request, jsonify, render_template
 from dotenv import load_dotenv
 import PyPDF2
+import certifi
 import anthropic
 from datetime import datetime, timezone
 from pymongo import MongoClient
@@ -13,7 +14,7 @@ load_dotenv()
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 
-mongo = MongoClient(os.getenv("MONGODB_URI"))
+mongo = MongoClient(os.getenv("MONGODB_URI"), tlsCAFile=certifi.where())
 submissions = mongo["resuready"]["submissions"]
 client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 

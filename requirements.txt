@@ -3,3 +3,4 @@ python-dotenv
 anthropic
 PyPDF2
 pymongo[srv]
+certifi
