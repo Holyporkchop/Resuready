@@ -154,7 +154,7 @@ def analyze():
                 "years_of_experience": years_of_experience,
                 "resume_text": resume_text[:10000],
                 "resume_filename": resume_file.filename,
-                "feedback": json.dumps(feedback),
+                "feedback": feedback,
                 "created_at": datetime.now(timezone.utc),
             }
         )
