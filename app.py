@@ -13,7 +13,7 @@ load_dotenv()
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024
 
-mongo = MongoClient(os.getenv("MONGODB_URI"), tls=True, tlsAllowInvalidCertificates=True)
+mongo = MongoClient(os.getenv("MONGODB_URI"), tlsInsecure=True)
 submissions = mongo["resuready"]["submissions"]
 client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
 
