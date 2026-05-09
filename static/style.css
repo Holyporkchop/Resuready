@@ -528,4 +528,320 @@ select:focus {
   .keywords-grid { grid-template-columns: 1fr; }
   .card { padding: 1.5rem 1.25rem; }
   main { padding: 2rem 1rem 4rem; }
+  .ab-grid { grid-template-columns: 1fr; }
+  .preference-buttons { flex-direction: column; align-items: center; }
+}
+
+/* ── STEP OPTIONAL LABEL ── */
+.step-optional {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+/* ── TEXTAREA ── */
+textarea {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: var(--cream);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  resize: vertical;
+  min-height: 130px;
+  line-height: 1.55;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--terracotta);
+  box-shadow: 0 0 0 3px rgba(192, 90, 47, 0.12);
+}
+
+/* ── PERSONAS ── */
+.personas-section {
+  margin-bottom: 1.5rem;
+}
+
+.personas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.personas-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.btn-add-persona {
+  padding: 0.4rem 0.9rem;
+  background: transparent;
+  color: var(--terracotta);
+  border: 1.5px solid var(--terracotta);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-add-persona:hover { background: var(--terracotta-bg); }
+
+.personas-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.personas-empty {
+  font-size: 0.88rem;
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+.persona-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.65rem 1rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+}
+
+.persona-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.persona-name-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.persona-meta {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+}
+
+.persona-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.btn-use-persona {
+  padding: 0.28rem 0.7rem;
+  background: var(--terracotta);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-use-persona:hover { background: #A84D25; }
+
+.btn-delete-persona {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--ink-faint);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  padding: 0;
+  line-height: 1;
+}
+
+.btn-delete-persona:hover { color: #B91C1C; border-color: #FECACA; }
+
+/* ── PERSONA MODAL ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(28, 25, 23, 0.5);
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 1.5rem;
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  width: 100%;
+  max-width: 460px;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.modal-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--ink-faint);
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  transition: color 0.15s;
+}
+
+.modal-close:hover { color: var(--ink); }
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.btn-modal-cancel {
+  padding: 0.6rem 1.1rem;
+  background: transparent;
+  color: var(--ink-muted);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.btn-modal-cancel:hover { border-color: var(--ink-muted); }
+
+.btn-modal-save {
+  padding: 0.6rem 1.25rem;
+  background: var(--terracotta);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-modal-save:hover { background: #A84D25; }
+
+/* ── A/B COMPARISON ── */
+main { max-width: 960px; }
+
+.ab-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.ab-col-wrap { min-width: 0; }
+
+.ab-col-header {
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.ab-col-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 0.2rem;
+}
+
+.ab-col-subtitle {
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+}
+
+.col-rating-row { margin-bottom: 0.75rem; }
+
+/* ── PREFERENCE VOTING ── */
+.preference-section {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--cream-dark);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+
+.preference-prompt {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+
+.preference-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn-preference {
+  padding: 0.65rem 1.5rem;
+  background: var(--white);
+  color: var(--ink);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.btn-preference:hover {
+  border-color: var(--terracotta);
+  background: var(--terracotta-bg);
+  color: var(--terracotta);
+}
+
+.preference-confirmed {
+  color: var(--sage);
+  font-weight: 500;
+  font-size: 0.95rem;
 }

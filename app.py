@@ -1,12 +1,14 @@
 import os
 import io
 import json
+import threading
 from flask import Flask, request, jsonify, render_template
 from dotenv import load_dotenv
 import PyPDF2
 import anthropic
 from datetime import datetime, timezone
 from pymongo import MongoClient
+from bson import ObjectId
 
 load_dotenv()
 
@@ -63,13 +65,46 @@ You will receive a user profile and their resume text. Analyze the resume thorou
 - Do not include any text outside the JSON object.
 </output_constraints>"""
 
+SYSTEM_PROMPT_B = """You are an expert resume writer with 20 years of experience reviewing thousands of resumes. Analyze this resume using your deep expert knowledge and provide feedback based on what top recruiters and hiring managers look for. Be specific and data-driven.
 
-def build_prompt(name, industry, years_of_experience, resume_text):
+<output_constraints>
+- Respond with ONLY valid JSON. No markdown, no explanation, no preamble.
+- Use exactly this schema:
+{
+  "overall_rating": "Strong" | "Average" | "Needs Work",
+  "summary": "2-3 sentence overall assessment",
+  "section_feedback": [
+    {
+      "section": "section name",
+      "score": "Strong" | "Average" | "Needs Work",
+      "feedback": "specific feedback"
+    }
+  ],
+  "keywords": {
+    "present": ["keyword1", "keyword2"],
+    "missing": ["keyword3", "keyword4"]
+  },
+  "rewrites": [
+    {
+      "original": "original bullet text",
+      "improved": "improved bullet text"
+    }
+  ],
+  "top_priorities": ["priority 1", "priority 2", "priority 3"]
+}
+- The top_priorities array must contain exactly 3 strings.
+- The rewrites array must contain 1 to 3 items.
+- Do not include any text outside the JSON object.
+</output_constraints>"""
+
+
+def build_prompt(name, industry, years_of_experience, resume_text, job_description=""):
+    jd_section = f"\n<job_description>\n{job_description}\n</job_description>" if job_description else ""
     return f"""<user_profile>
 Name: {name}
 Industry: {industry}
 Years of Experience: {years_of_experience}
-</user_profile>
+</user_profile>{jd_section}
 
 <resume>
 {resume_text}
@@ -96,6 +131,7 @@ def analyze():
     name = request.form.get("name", "").strip()
     industry = request.form.get("industry", "").strip()
     years_of_experience = request.form.get("years_of_experience", "").strip()
+    job_description = request.form.get("job_description", "").strip()
     resume_file = request.files.get("resume")
 
     if not all([name, industry, years_of_experience, resume_file]):
@@ -113,56 +149,89 @@ def analyze():
     if not resume_text:
         return jsonify({"error": "No text found in PDF. Please ensure your PDF is not an image scan."}), 400
 
-    try:
-        message = client.messages.create(
-            model="claude-opus-4-7",
-            max_tokens=2048,
-            thinking={"type": "adaptive"},
-            system=[
-                {
-                    "type": "text",
-                    "text": SYSTEM_PROMPT,
-                    "cache_control": {"type": "ephemeral"},
-                }
-            ],
-            messages=[
-                {
-                    "role": "user",
-                    "content": build_prompt(name, industry, years_of_experience, resume_text),
-                }
-            ],
-        )
-    except anthropic.APIError as e:
-        return jsonify({"error": f"AI service error: {str(e)}"}), 502
+    results = {}
+    errors = {}
+    prompt = build_prompt(name, industry, years_of_experience, resume_text, job_description)
 
-    raw_response = ""
-    for block in message.content:
-        if block.type == "text":
-            raw_response = block.text
-            break
+    def call_claude(key, system_prompt):
+        try:
+            message = client.messages.create(
+                model="claude-opus-4-7",
+                max_tokens=2048,
+                thinking={"type": "adaptive"},
+                system=[{"type": "text", "text": system_prompt, "cache_control": {"type": "ephemeral"}}],
+                messages=[{"role": "user", "content": prompt}],
+            )
+            raw = ""
+            for block in message.content:
+                if block.type == "text":
+                    raw = block.text
+                    break
+            results[key] = json.loads(raw)
+        except anthropic.APIError as e:
+            errors[key] = f"AI service error: {str(e)}"
+        except json.JSONDecodeError:
+            errors[key] = "Failed to parse AI response"
+        except Exception as e:
+            errors[key] = str(e)
 
-    try:
-        feedback = json.loads(raw_response)
-    except json.JSONDecodeError:
-        return jsonify({"error": "Failed to parse AI response. Please try again."}), 500
+    t_a = threading.Thread(target=call_claude, args=("a", SYSTEM_PROMPT))
+    t_b = threading.Thread(target=call_claude, args=("b", SYSTEM_PROMPT_B))
+    t_a.start()
+    t_b.start()
+    t_a.join()
+    t_b.join()
 
+    if errors:
+        return jsonify({"error": list(errors.values())[0]}), 502
+
+    resume_filename = resume_file.filename
+    submission_id = None
     try:
-        submissions.insert_one(
-            {
-                "name": name,
-                "industry": industry,
-                "years_of_experience": years_of_experience,
-                "resume_text": resume_text[:10000],
-                "resume_filename": resume_file.filename,
-                "feedback": feedback,
-                "created_at": datetime.now(timezone.utc),
-            }
-        )
+        result = submissions.insert_one({
+            "name": name,
+            "industry": industry,
+            "years_of_experience": years_of_experience,
+            "job_description": job_description,
+            "resume_text": resume_text[:10000],
+            "resume_filename": resume_filename,
+            "feedback_a": results["a"],
+            "feedback_b": results["b"],
+            "preferred_feedback": None,
+            "created_at": datetime.now(timezone.utc),
+        })
+        submission_id = str(result.inserted_id)
     except Exception as e:
         app.logger.error("MongoDB insert failed: %s", e)
         print(f"MongoDB insert failed: {e}")
 
-    return jsonify(feedback)
+    return jsonify({
+        "feedback_a": results["a"],
+        "feedback_b": results["b"],
+        "submission_id": submission_id,
+    })
+
+
+@app.route("/preference", methods=["POST"])
+def preference():
+    data = request.get_json()
+    submission_id = data.get("submission_id") if data else None
+    preferred = data.get("preferred") if data else None
+
+    if not submission_id or preferred not in ("a", "b"):
+        return jsonify({"error": "Invalid request"}), 400
+
+    try:
+        submissions.update_one(
+            {"_id": ObjectId(submission_id)},
+            {"$set": {"preferred_feedback": preferred}},
+        )
+    except Exception as e:
+        app.logger.error("MongoDB preference update failed: %s", e)
+        print(f"MongoDB preference update failed: {e}")
+        return jsonify({"error": "Failed to save preference"}), 500
+
+    return jsonify({"ok": True})
 
 
 if __name__ == "__main__":
